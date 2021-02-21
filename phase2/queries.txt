@@ -1,0 +1,9 @@
+select Id, Phone, Decription, Name from Supplier, Category where Name = "Men";
+select Id, Phone, Decription, Name from Category where Name = "Men";
+select ContactName, Phone, Id, Decription, Name from Category, Supplier where Name = Children and Phone = '9910933995' and ContactName = 'pikassu';
+select ContactName, Id from Supplier;
+select ContactName, Phone, Id from Supplier;
+select ContactName, Id, Phone, Decription, Name from Supplier, Category where Phone = 9910933995 and ContactName >= "pragun";
+select ContactName, Id, CompanyName, City, Phone, Decription, Name from Supplier, Category where CompanyName < 9910933995 and ContactName >= "pragun";
+select Price, Name from Product where CategoryId = 2;
+select Price, Decription, Name from Product where CategoryId = 2;
