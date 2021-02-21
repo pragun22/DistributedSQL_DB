@@ -42,7 +42,44 @@ relat = [
 ]
 
 # for i in range(1, len(attribs) + 1):
-# 	print("INSERT INTO Attributes Values({0}, '{1}', '{2}');".format(i, attribs[i-1], relat[i-1]))
+	# print("INSERT INTO Attributes Values({0}, '{1}', '{2}');".format(i, attribs[i-1], relat[i-1]))
+# attribs = [
+# "reserveId", #resreve
+# "checkIn",
+# "checkOut",
+# "id", #room
+# "city",
+# "reserveId",
+# "roomNo",
+# "guestId", #Guest
+# "reserveId",
+# "name", 
+# "address",
+# "email", 
+# "phone", 
+# "cit",
+# "payment", #Product
+# ]
+# relat = [
+# "Reserve",
+# "Reserve",
+# "Reserve",
+# "Room", # categ
+# "Room", #Categ
+# "Room", #Categ
+# "Room", #Categ
+# "Guest", #Product
+# "Guest", #Product
+# "Guest",
+# "Guest",
+# "Guest",
+# "Guest",
+# "Guest",
+# "Guest"
+# ]
+
+# for i in range(1, len(attribs) + 1):
+# 	print("INSERT INTO Attributes Values({0}, '{1}', '{2}');".format(i+19, attribs[i-1], relat[i-1]))
 
 
 
@@ -55,6 +92,15 @@ relat = [
 # print("INSERT INTO Fragments Values(7, 2, 'DHor', 'Product');")
 # print("INSERT INTO Fragments Values(8, 3, 'DHor', 'Product');")
 
+# print("INSERT INTO Fragments Values(9 , 1, 'Hor', 'Room');")
+# print("INSERT INTO Fragments Values(10, 2, 'Hor', 'Room');")
+# print("INSERT INTO Fragments Values(11, 3, 'Hor', 'Room');")
+# print("INSERT INTO Fragments Values(12, 1, 'Ver', 'Guest');")
+# print("INSERT INTO Fragments Values(13, 2, 'Ver', 'Guest');")
+# print("INSERT INTO Fragments Values(14, 3, 'Ver', 'Guest');")
+# print("INSERT INTO Fragments Values(15, 1, 'DHor', 'Reserve');")
+# print("INSERT INTO Fragments Values(16, 2, 'DHor', 'Reserve');")
+# print("INSERT INTO Fragments Values(17, 3, 'DHor', 'Reserve');")
 
 
 
@@ -65,47 +111,64 @@ relat = [
 
 
 
-print("INSERT INTO HorFragment Values(1, 10, 'Men');")
-print("INSERT INTO HorFragment Values(1, 11, 'Men');")
-print("INSERT INTO HorFragment Values(1, 12, 'Men');")
-print("INSERT INTO HorFragment Values(2, 10, 'Women');")
-print("INSERT INTO HorFragment Values(2, 11, 'Women');")
-print("INSERT INTO HorFragment Values(2, 12, 'Women');")
-print("INSERT INTO HorFragment Values(3, 10, 'Children');")
-print("INSERT INTO HorFragment Values(3, 11, 'Children');")
-print("INSERT INTO HorFragment Values(3, 12, 'Children');")
+# print("INSERT INTO HorFragment Values(1, 10, 'Men');")
+# print("INSERT INTO HorFragment Values(1, 11, 'Men');")
+# print("INSERT INTO HorFragment Values(1, 12, 'Men');")
+# print("INSERT INTO HorFragment Values(2, 10, 'Women');")
+# print("INSERT INTO HorFragment Values(2, 11, 'Women');")
+# print("INSERT INTO HorFragment Values(2, 12, 'Women');")
+# print("INSERT INTO HorFragment Values(3, 10, 'Children');")
+# print("INSERT INTO HorFragment Values(3, 11, 'Children');")
+# print("INSERT INTO HorFragment Values(3, 12, 'Children');")
 
 
-print("INSERT INTO VerFragment Values(4, 1);")
-print("INSERT INTO VerFragment Values(4, 2);")
-print("INSERT INTO VerFragment Values(4, 3);")
-print("INSERT INTO VerFragment Values(4, 4);")
-print("INSERT INTO VerFragment Values(5, 1);")
-print("INSERT INTO VerFragment Values(5, 5);")
-print("INSERT INTO VerFragment Values(5, 6);")
-print("INSERT INTO VerFragment Values(5, 7);")
-print("INSERT INTO VerFragment Values(5, 8);")
-print("INSERT INTO VerFragment Values(5, 9);")
+# print("INSERT INTO HorFragment Values(9, 23, 'Delhi');")
+# print("INSERT INTO HorFragment Values(9, 24, 'Delhi');")
+# print("INSERT INTO HorFragment Values(9, 25, 'Delhi');")
+# print("INSERT INTO HorFragment Values(9, 26, 'Delhi');")
+
+# print("INSERT INTO HorFragment Values(10, 23, 'Mumbai');")
+# print("INSERT INTO HorFragment Values(10, 24, 'Mumbai');")
+# print("INSERT INTO HorFragment Values(10, 25, 'Mumbai');")
+# print("INSERT INTO HorFragment Values(10, 26, 'Mumbai');")
+
+# print("INSERT INTO HorFragment Values(11, 23, 'Goa');")
+# print("INSERT INTO HorFragment Values(11, 24, 'Goa');")
+# print("INSERT INTO HorFragment Values(11, 25, 'Goa');")
+# print("INSERT INTO HorFragment Values(11, 26, 'Goa');")
 
 
-print("INSERT INTO DHorFragment Values(6, 13, 1);")
-print("INSERT INTO DHorFragment Values(6, 14, 1);")
-print("INSERT INTO DHorFragment Values(6, 15, 1);")
-print("INSERT INTO DHorFragment Values(6, 16, 1);")
-print("INSERT INTO DHorFragment Values(6, 17, 1);")
-print("INSERT INTO DHorFragment Values(6, 18, 1);")
-print("INSERT INTO DHorFragment Values(6, 19, 1);")
-print("INSERT INTO DHorFragment Values(7, 13, 2);")
-print("INSERT INTO DHorFragment Values(7, 14, 2);")
-print("INSERT INTO DHorFragment Values(7, 15, 2);")
-print("INSERT INTO DHorFragment Values(7, 16, 2);")
-print("INSERT INTO DHorFragment Values(7, 17, 2);")
-print("INSERT INTO DHorFragment Values(7, 18, 2);")
-print("INSERT INTO DHorFragment Values(7, 19, 2);")
-print("INSERT INTO DHorFragment Values(8, 13, 3);")
-print("INSERT INTO DHorFragment Values(8, 14, 3);")
-print("INSERT INTO DHorFragment Values(8, 15, 3);")
-print("INSERT INTO DHorFragment Values(8, 16, 3);")
-print("INSERT INTO DHorFragment Values(8, 17, 3);")
-print("INSERT INTO DHorFragment Values(8, 18, 3);")
-print("INSERT INTO DHorFragment Values(8, 19, 3);")
+# print("INSERT INTO VerFragment Values(12, 27);")
+# print("INSERT INTO VerFragment Values(12, 28);")
+# print("INSERT INTO VerFragment Values(12, 29);")
+# print("INSERT INTO VerFragment Values(13, 27);")
+# print("INSERT INTO VerFragment Values(13, 30);")
+# print("INSERT INTO VerFragment Values(13, 31);")
+# print("INSERT INTO VerFragment Values(13, 32);")
+# print("INSERT INTO VerFragment Values(13, 33);")
+# print("INSERT INTO VerFragment Values(14, 27);")
+# print("INSERT INTO VerFragment Values(14, 34);")
+
+
+# print("INSERT INTO DHorFragment Values(6, 13, 1);")
+# print("INSERT INTO DHorFragment Values(6, 14, 1);")
+# print("INSERT INTO DHorFragment Values(6, 15, 1);")
+# print("INSERT INTO DHorFragment Values(6, 16, 1);")
+# print("INSERT INTO DHorFragment Values(6, 17, 1);")
+# print("INSERT INTO DHorFragment Values(6, 18, 1);")
+# print("INSERT INTO DHorFragment Values(6, 19, 1);")
+# print("INSERT INTO DHorFragment Values(7, 13, 2);")
+# print("INSERT INTO DHorFragment Values(7, 14, 2);")
+# print("INSERT INTO DHorFragment Values(7, 15, 2);")
+
+
+
+print("INSERT INTO DHorFragment Values(15, 20, 9, '1');")
+print("INSERT INTO DHorFragment Values(15, 21, 9, '1');")
+print("INSERT INTO DHorFragment Values(15, 22, 9, '1');")
+print("INSERT INTO DHorFragment Values(16, 20, 10, '2');")
+print("INSERT INTO DHorFragment Values(16, 21, 10, '2');")
+print("INSERT INTO DHorFragment Values(16, 22, 10, '2');")
+print("INSERT INTO DHorFragment Values(17, 20, 11, '3');")
+print("INSERT INTO DHorFragment Values(17, 21, 11, '3');")
+print("INSERT INTO DHorFragment Values(17, 22, 11, '3');")

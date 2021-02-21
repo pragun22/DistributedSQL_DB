@@ -7,3 +7,7 @@ select ContactName, Id, Phone, Decription, Name from Supplier, Category where Ph
 select ContactName, Id, CompanyName, City, Phone, Decription, Name from Supplier, Category where CompanyName < 9910933995 and ContactName >= "pragun";
 select Price, Name from Product where CategoryId = 2;
 select Price, Decription, Name from Product where CategoryId = 2;
+SELECT city, email, name, payment, checkin from Reserve, Room, Guest where city = "Mumbai" and reserveId = 2;
+SELECT id, city from Room where reserveId = 2;
+SELECT id, city, checkIn from Room, Reserve where reserveId = 2;
+select guestId, name, city from Guest, Room where city = "Goa"
