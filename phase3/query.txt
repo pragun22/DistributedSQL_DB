@@ -1,0 +1,9 @@
+select me, SUM(ab), average(tin) from movies group by me, sump having sump = 4 and me < 3 or lol = 2 or lmao > 2
+select me, SUM(ab), average(tin) from movies group by me, sump having me < 3 or lol = 2 or lmao = "lololo"
+select me, SUM(ab), average(tin) from movies group by me, sump having sump = 4 and me < 3 
+select me, SUM(ab), average(tin) from movies group by me, sump having sump = 4
+
+
+select sum(reserveId) from Room Group by city having city = "delhi";
+select sum(reserveId), city from Room Group by city, id having roomNo > 4;
+select sum(reserveId) from Room Group by city having city = 'delhi';

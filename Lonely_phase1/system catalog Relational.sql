@@ -33,8 +33,8 @@ CREATE TABLE `VerFragment` (
 CREATE TABLE `DHorFragment` (
   `FragmentId` int NOT NULL,
   `AttributeId` int NOT NULL,
-  `condition` varchar(256) NOT NULL,
   `Right_Table_FragmentId` int NOT NULL,
+  `condition` varchar(256) NOT NULL,
   PRIMARY KEY (`FragmentId`, `AttributeId`)
 );
 

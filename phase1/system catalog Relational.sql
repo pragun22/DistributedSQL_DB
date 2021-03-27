@@ -30,11 +30,11 @@ CREATE TABLE `Vertical-Fragment` (
   PRIMARY KEY (`FragmentId`, `AttributeId`)
 );
 
-CREATE TABLE `Derived-Horizontal-Fragment` (
+CREATE TABLE `DHorFragment` (
   `FragmentId` int,
   `AttributeId` int,
-  `condition` int,
   `Right_Table_FragmentId` int,
+  `condition` varchar(256),
   PRIMARY KEY (`FragmentId`, `AttributeId`)
 );
 
