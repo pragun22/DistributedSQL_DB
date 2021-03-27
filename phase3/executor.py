@@ -238,8 +238,11 @@ print('AttribsToRelation =>',AttribsToRelation)
 print('AttribIdToAttrib =>',AttribIdToAttrib)
 
 QueryForSite = {}
+
+
+# need to include and & or as well
 if 'Hor' in FragmentTypeToId:
-	
+	print("For Horizontal Fragments")
 	queryH = "SELECT "
 	Hq = ""
 	gb = " GROUP BY "
@@ -265,9 +268,20 @@ if 'Hor' in FragmentTypeToId:
 		queryH += Hq[:-4]
 		queryH += ";"
 
-	print(queryH)
 	if HOR_CONDITION in having:
-		pass
+		condition = havingcond[HOR_CONDITION]
+		query = "select FragmentId from HorFragment where `condition` = '"+str(condition)+"';"
+		cursor.execute(query)
+		result = cursor.fetchall()
+		try:
+			fragId = result[0][0]
+		except:
+			print("Fragment doesn't exist \nexiting")
+			EXIT()
+		siteId = FragmentIdToSite[fragId]		
+		print("Only need to perform Horizontal Fragment query on site with ID ", siteId)
+		QueryForSite[siteId].append(queryH)
+
 	else:
 		print("Need to perform queries on all the Sites")
 
@@ -277,4 +291,58 @@ if 'Hor' in FragmentTypeToId:
 				QueryForSite[siteId] = []
 			QueryForSite[siteId].append(queryH)
 
+	print(queryH)
 
+if 'DHor' in FragmentTypeToId:
+
+	print("For Derived Horizontal Fragments")
+	queryH = "SELECT "
+	Hq = ""
+	gb = " GROUP BY "
+	for att in RelationToAttribs[FragmentTypeToRelation['DHor']]:
+		
+		if att in selects:
+			queryH += (att+", ")
+		elif att in attribToAggs:
+			queryH += (attribToAggs[att] +"(" + att + "), ")
+		if att in groupby:
+			gb += (att+", ")
+		if att in having:
+			Hq += FormWhereQueries(havingop[att], att, havingcond[att])
+			Hq += " and "
+
+	queryH = queryH[:-2]
+	queryH += " FROM " + FragmentTypeToRelation['DHor'];
+	queryH += gb[:-2] ;
+
+
+	if Hq != "":
+		queryH += " Having "
+		queryH += Hq[:-4]
+		queryH += ";"
+
+	print(queryH)
+	if DHOR_CONDITION in having:
+		condition = havingcond[DHOR_CONDITION]
+		query = "select FragmentId from DHorFragment where `condition` = '"+str(condition)+"';"
+		cursor.execute(query)
+		result = cursor.fetchall()
+		try:
+			fragId = result[0][0]
+		except:
+			print("Fragment doesn't exist \nexiting")
+			EXIT()
+		siteId = FragmentIdToSite[fragId]		
+		print("Only need to perform Derived Horizontal Fragment query on site with ID ", siteId)
+		QueryForSite[siteId].append(queryH)
+	else:
+		print("Need to perform queries on all the Sites")
+
+		for fragId in FragmentTypeToId['DHor']:
+			siteId = FragmentIdToSite[fragId]
+			if siteId not in QueryForSite:
+				QueryForSite[siteId] = []
+			QueryForSite[siteId].append(queryH)
+
+if 'Ver' in FragmentTypeToId:
+	pass
