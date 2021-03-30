@@ -7,3 +7,7 @@ select me, SUM(ab), average(tin) from movies group by me, sump having sump = 4
 select sum(reserveId) from Room Group by city having city = "delhi";
 select sum(reserveId), city from Room Group by city, id having roomNo > 4;
 select sum(reserveId) from Room Group by city having city = 'delhi';
+
+SELECT cities.cityname, MIN(users.age) FROM cities JOIN users ON cities.id = users.city_id  JOIN Piks on pkid = ukid GROUP BY cities.cityname
+
+select address from Guest Group by address;

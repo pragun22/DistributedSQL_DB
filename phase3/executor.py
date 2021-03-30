@@ -1,10 +1,8 @@
 from moz_sql_parser import parse
 import mysql.connector
-import numpy as np
 import os
 import json
 import time
-from decomposer import Decomposer
 
 def EXIT():
 	cursor.close()
@@ -14,17 +12,6 @@ def EXIT():
 
 HOR_CONDITION = 'city'
 DHOR_CONDITION = 'reserveId'
-
-def operation(arr, op):
-	arr = np.array(arr)
-	if op == 'SUM':
-		return np.sum(arr)
-	if op == 'MIN':
-		return np.min(arr)
-	if op == 'MAX':
-		return np.max(arr)
-	if op == 'AVG':
-		return np.mean(arr)
 
 def FormWhereQueries(op, operand1, operand2):
 	if op == 'eq':
@@ -78,11 +65,22 @@ havingop = {}
 having = []
 relations = []
 
+joinFlag = False
+semiJoinCond = None 
 if isinstance(parse_tree['from'], str):
 	relations.append(parse_tree['from'])
 else :
 	for rel in parse_tree['from']:
-		relations.append(rel)
+		if isinstance(rel, str):
+			relations.append(rel)
+		else:
+			try:
+				relations.append(rel['join'])
+				semiJoinCond = rel['on']
+				joinFlag = True
+			except:
+				print("Error in join syntax")
+				exit(0)
 
 
 if isinstance(parse_tree['select'], list):
@@ -358,7 +356,7 @@ if 'Ver' in FragmentTypeToId:
 			res = cursor.fetchall()
 			if len(res)!=0:
 				siteId = FragmentIdToSite[fragId]
-				if siteId not in siteIdtoattrib:
+				if siteId not in siteIdToAttrib:
 					siteIdToAttrib[siteId] = []
 				siteIdToAttrib[siteId].append(attribId)
 
@@ -396,8 +394,17 @@ if 'Ver' in FragmentTypeToId:
 			if Hq != "":
 				queryV += " Having " + Hq[:-4] + ";"
 
+
 			print("query ===>", queryV)
-			
+			# conn = mysql.connector.connect(user='pragun', password='letscode', host='http://10.3.5.215', port=8081, database='Lonely')
+			# cursor = conn.cursor()
+
+			# try:
+			# 	cursor.execute(queryV)
+			# 	print(cursor.fetchall())
+			# except:
+			# 	print("bt")
+
 
 
 
@@ -406,7 +413,7 @@ if 'Ver' in FragmentTypeToId:
 		queryV = "SELECT "
 		Hq = ""
 		gb = " GROUP BY "
-		for attId in siteIdtoattrib[flagId]:
+		for attId in siteIdToAttrib[flagId]:
 			att = AttribIdToAttrib[attId]
 			if att in selects:
 				queryV += (att+", ")
@@ -430,3 +437,15 @@ if 'Ver' in FragmentTypeToId:
 		if flagId not in QueryForSite:
 			QueryForSite[flagId] = []
 		QueryForSite[flagId].append(queryV)
+
+		conn2 = mysql.connector.connect(user='pragun', password='letscode', host='10.3.5.212', database='Lonely')
+		cursor2 = conn2.cursor()
+
+		try:
+			cursor2.execute("SELECT * from Supplier")
+			# cursor2.execute(queryV)
+			print('fetched result')
+			print(cursor2.fetchall())
+		
+		except:
+			print("bt")
