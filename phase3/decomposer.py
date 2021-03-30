@@ -212,7 +212,7 @@ def Decomposer():
 				queryV += temp[:-4]
 				queryV += ";"
 
-			print("perform the query on the following site with id:", flag,sep=" ")
+			print("perform the query on the following site with id:", flag, sep=" ")
 			print(queryV)
 			if flag not in QuerySites:
 				QuerySites[flag] = []

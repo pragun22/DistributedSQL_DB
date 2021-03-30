@@ -344,5 +344,89 @@ if 'DHor' in FragmentTypeToId:
 				QueryForSite[siteId] = []
 			QueryForSite[siteId].append(queryH)
 
+
+# create siteIdtoattrib
+# check if a single site suffices or need to take from multiple sites
+
 if 'Ver' in FragmentTypeToId:
-	pass
+	siteIdToAttrib = {}
+
+	for fragId in FragmentTypeToId['Ver']:
+		for attribId in AttribIdToAttrib:
+			query = "SELECT * FROM VerFragment WHERE FragmentId = " + str(fragId) + " and AttributeId = " + str(attribId)
+			cursor.execute(query)
+			res = cursor.fetchall()
+			if len(res)!=0:
+				siteId = FragmentIdToSite[fragId]
+				if siteId not in siteIdtoattrib:
+					siteIdToAttrib[siteId] = []
+				siteIdToAttrib[siteId].append(attribId)
+
+	TotalAtt = len(RelationToAttribsId[FragmentTypeToRelation['Ver']])
+
+	flagId = -1
+
+	for siteId in siteIdToAttrib:
+		if len(siteIdToAttrib) == TotalAtt:
+			flagId = siteId
+			break
+	if flagId == -1:
+		print("need to perform query on all sites")
+		query = "SELECT id from Attributes WHERE RelationName="+str(FragmentTypeToRelation['Ver'])+" AttributeName='id'"
+		cursor.execute(query)
+		masterId = cursor.fetchall()[0][0]
+		masterAtt = AttribIdToAttrib[masterId] 
+		for siteId in siteIdToAttrib:
+			print('FOR SITE with ID', siteId)
+			if masterAtt not in siteIdToAttrib[siteId]:
+				siteIdToAttrib[siteId].append(masterAtt)
+			queryV = "SELECT "
+			Hq = ""
+			
+			for attId in siteIdtoattrib[flagId]:
+				att = AttribIdToAttrib[attId]
+				
+				queryV += (att+", ")
+				if att in having:
+					Hq += FormWhereQueries(havingop[att], att, havingcond[att])
+					Hq += " and "
+
+			queryV = queryV[:-2]
+			queryV += " FROM " + FragmentTypeToRelation['Ver'];
+			if Hq != "":
+				queryV += " Having " + Hq[:-4] + ";"
+
+			print("query ===>", queryV)
+			
+
+
+
+	else:
+		print("Perform query on a single site with id ", flagId)
+		queryV = "SELECT "
+		Hq = ""
+		gb = " GROUP BY "
+		for attId in siteIdtoattrib[flagId]:
+			att = AttribIdToAttrib[attId]
+			if att in selects:
+				queryV += (att+", ")
+			elif att in attribToAggs:
+				queryV += (attribToAggs[att] +"(" + att + "), ")
+			if att in groupby:
+				gb += (att+", ")
+			if att in having:
+				Hq += FormWhereQueries(havingop[att], att, havingcond[att])
+				Hq += " and "
+		queryV = queryV[:-2]
+
+		queryV += " FROM " + FragmentTypeToRelation['Ver'];
+		queryV += gb[:-2] ;
+
+		if Hq != "":
+			queryV += " Having " + Hq[:-4] + ";"
+
+		print("query ===>", queryV)
+
+		if flagId not in QueryForSite:
+			QueryForSite[flagId] = []
+		QueryForSite[flagId].append(queryV)
