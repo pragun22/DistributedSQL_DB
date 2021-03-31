@@ -12,6 +12,10 @@ def EXIT():
 
 HOR_CONDITION = 'city'
 DHOR_CONDITION = 'reserveId'
+URL = {}
+URL['1'] = '10.3.5.212'
+URL['2'] = '10.3.5.211'
+URL['3'] = '10.3.5.208'
 
 def FormWhereQueries(op, operand1, operand2):
 	if op == 'eq':
@@ -239,6 +243,92 @@ QueryForSite = {}
 
 
 # need to include and & or as well
+if 'Hor' in FragmentTypeToId and 'Ver' in FragmentTypeToId:
+	
+	## finding sites for 'Hor'
+	sitesHor=[]
+	if HOR_CONDITION in having:
+		condition = havingcond[HOR_CONDITION]
+		query = "select FragmentId from HorFragment where `condition` = '"+str(condition)+"';"
+		cursor.execute(query)
+		result = cursor.fetchall()
+		try:
+			fragId = result[0][0]
+		except:
+			print("Fragment doesn't exist \nexiting")
+			EXIT()
+		siteId = FragmentIdToSite[fragId]		
+		sitesHor.append(siteId)
+	else:
+		for fragId in FragmentTypeToId:
+			sitesHor.append(FragmentIdToSite[fragId])
+	## finding sites for 'Ver'
+	
+	siteIdToAttribVer = {}
+	sitesVer = []
+
+	for fragId in FragmentTypeToId['Ver']:
+		for attribId in AttribIdToAttrib:
+			query = "SELECT * FROM VerFragment WHERE FragmentId = " + str(fragId) + " and AttributeId = " + str(attribId)
+			cursor.execute(query)
+			res = cursor.fetchall()
+			if len(res)!=0:
+				siteId = FragmentIdToSite[fragId]
+				if siteId not in siteIdToAttribVer:
+					siteIdToAttribVer[siteId] = []
+				siteIdToAttribVer[siteId].append(attribId)
+
+	TotalAtt = len(RelationToAttribsId[FragmentTypeToRelation['Ver']])
+
+	for siteId in siteIdToAttrib:
+		if len(siteIdToAttrib[siteId]) == 1 and 'id' in siteIdToAttrib[siteId]:
+			continue
+		sitesVer.append(SiteId)
+		if len(siteIdToAttrib) == TotalAtt:
+			sitesVer = []
+			sitesVer.append(siteId)
+			break
+	if len(sitesVer) == 0:
+		sitesVer.append(1)
+	## Bringinn Hor to one place
+	attribsHor = RelationToAttribs[FragmentTypeToRelation['Hor']]
+	dataHor = []
+	for siteId in sitesHor:
+		conn2 = mysql.connector.connect(user='pragun', password='letscode', host=URL[siteId], database='Lonely')
+		cursor2 = conn2.cursor()
+		query = "SELECT" + attribsHor.join(', ') + " FROM " + str(FragmentTypeToRelation['Hor'])  + ";"
+		cursor2.execute(query)
+		res = cursor2.fetchall();
+		dataHor = [dataHor, res]
+	# create temp hor table
+	# query = "CREATE TABLE `TempHor`(id int not null, city varchar(10) not null, reserveId int not null, roomNo int not null);"
+	# Bringing Ver to one place
+	VerMap = {}
+	for siteId in sitesVer:
+		conn2 = mysql.connector.connect(user='pragun', password='letscode', host=URL[siteId], database='Lonely')
+		cursor2 = conn2.cursor()
+		if 'id' in siteIdToAttribVer[siteId]:
+			siteIdToAttribVer[siteId].remove('id')
+		siteIdToAttrib[SiteId].insert(0, 'id')
+		query = "SELECT " + siteIdToAttribVer[siteId].join(', ') + " FROM " + str(FragmentTypeToRelation['Ver']) +";"
+		cursor2.execute(query)
+		res = cursor2.fetchall();
+		for i in res:
+			if i[0] not in VerMap:
+				VerMap[i[0]] = []
+			for j in range(1, len(i)):
+				VerMap[i[0]].append(i[j])
+
+
+
+
+if 'Hor' in FragmentTypeToId and 'DHor' in FragmentTypeToId:
+	pass
+
+if 'Ver' in FragmentTypeToId and 'DHor' in FragmentTypeToId:
+	pass
+
+ 
 if 'Hor' in FragmentTypeToId:
 	print("For Horizontal Fragments")
 	queryH = "SELECT "
@@ -438,14 +528,12 @@ if 'Ver' in FragmentTypeToId:
 			QueryForSite[flagId] = []
 		QueryForSite[flagId].append(queryV)
 
-		conn2 = mysql.connector.connect(user='pragun', password='letscode', host='10.3.5.212', database='Lonely')
-		cursor2 = conn2.cursor()
 
-		try:
-			cursor2.execute("SELECT * from Supplier")
-			# cursor2.execute(queryV)
-			print('fetched result')
-			print(cursor2.fetchall())
+		# try:
+		# 	cursor2.execute("SELECT * from Supplier")
+		# 	# cursor2.execute(queryV)
+		# 	print('fetched result')
+		# 	print(cursor2.fetchall())
 		
-		except:
-			print("bt")
+		# except:
+		# 	print("bt")
