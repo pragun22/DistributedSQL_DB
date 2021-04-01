@@ -336,7 +336,70 @@ if 'Hor' in FragmentTypeToRelation:
 	input_query = input_query.replace(FragmentTypeToRelation['Hor'],'TempHor')
 
 if 'DHor' in FragmentTypeToRelation:
+	try:
+		sitesHor=[]
+		if DHOR_CONDITION in having:
+			condition = havingcond[DHOR_CONDITION]
+			query = "select FragmentId from DHorFragment where `condition` = '"+str(condition)+"';"
+			cursor.execute(query)
+			result = cursor.fetchall()
+			try:
+				fragId = result[0][0]
+			except:
+				print("Fragment doesn't exist \nexiting")
+				EXIT()
+			siteId = FragmentIdToSite[fragId]		
+			sitesHor.append(siteId)
+		else:
+			for fragId in FragmentTypeToId['DHor']:
+				sitesHor.append(FragmentIdToSite[fragId])
+	except Exception as e:
+		print("Error while finding sites for Horizontal Fragment")
+		print(e)
+
+	try:
+		attribsDHor = RelationToAttribs[FragmentTypeToRelation['DHor']]
+		attribTypeDHor = {}
+		query = "DESCRIBE " + FragmentTypeToRelation['DHor']
+		cursor.execute(query)
+		res = cursor.fetchall()
+		for i in res:
+			attribTypeDHor[i[0]] = i[1].decode('utf-8')
+		dataDHor = []
+		for siteId in sitesDHor:
+			conn2 = mysql.connector.connect(user='pragun', password='letscode', host=URL[str(siteId)], database='Lonely')
+			cursor2 = conn2.cursor()
+			query = "SELECT " + ', '.join(attribsDHor) + " FROM " + str(FragmentTypeToRelation['DHor'])  + ";"
+			cursor2.execute(query)
+			res = cursor2.fetchall()
+			dataDHor = dataDHor + res
+		cursor.execute("DROP TABLE IF EXISTS `TempDHor`")
+		query = "CREATE TABLE `TempDHor`("
+		for att in attribsDHor:
+			query+= str(att) + " "+ str(attribTypeDHor[att]) + ", "
+		query = query[:-2]
+		query += ");"
+		cursor.execute(query)
+		for dat in dataDHor:
+			query = "INSERT INTO `TempDHor` VALUES( "
+			for i in dat:
+				if not isinstance(i, int):
+					query+="'"
+				query += str(i)
+				if not isinstance(i, int):
+					query+="'"
+				query += ", "
+			query = query[:-2]
+			query += ");"
+			cursor.execute(query)
+
+	except Exception as e:
+		print("Error while moving data to one site for semi-join for DHorizontal Fragment")
+		print(e)
+
+
 	input_query = input_query.replace(FragmentTypeToRelation['DHor'],'TempDHor')
+
 if 'Ver' in FragmentTypeToRelation:
 	try:
 		siteIdToAttribVer = {}

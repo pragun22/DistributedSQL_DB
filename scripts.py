@@ -183,15 +183,15 @@ print("INSERT INTO `Room` VALUES(2, 'Delhi', 2, 402);")
 print("INSERT INTO `Room` VALUES(3, 'Delhi', 3, 404);")
 print("INSERT INTO `Room` VALUES(4, 'Delhi', 4, 501);")
 
-print("INSERT INTO `Room` VALUES(5, 'Goa', 5, 203);")
-print("INSERT INTO `Room` VALUES(6, 'Goa', 6, 201);")
-print("INSERT INTO `Room` VALUES(7, 'Goa', 7, 601);")
-print("INSERT INTO `Room` VALUES(8, 'Goa', 8, 999);")
+print("INSERT INTO `Room` VALUES(5, 'Mumbai', 5, 203);")
+print("INSERT INTO `Room` VALUES(6, 'Mumbai', 6, 201);")
+print("INSERT INTO `Room` VALUES(7, 'Mumbai', 7, 601);")
+print("INSERT INTO `Room` VALUES(8, 'Mumbai', 8, 999);")
 
-print("INSERT INTO `Room` VALUES(9, 'Pune', 9, 205);")
-print("INSERT INTO `Room` VALUES(10, 'Pune', 10, 206);")
-print("INSERT INTO `Room` VALUES(11, 'Pune', 11, 207);")
-print("INSERT INTO `Room` VALUES(12, 'Pune', 12, 210);")
+print("INSERT INTO `Room` VALUES(9, 'Goa', 9, 205);")
+print("INSERT INTO `Room` VALUES(10, 'Goa', 10, 206);")
+print("INSERT INTO `Room` VALUES(11, 'Goa', 11, 207);")
+print("INSERT INTO `Room` VALUES(12, 'Goa', 12, 210);")
 
 
 print("INSERT INTO `Reserve` VALUES(1, '12:00:01', '13:00:05');")
