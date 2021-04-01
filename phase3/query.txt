@@ -11,3 +11,5 @@ select sum(reserveId) from Room Group by city having city = 'delhi';
 SELECT cities.cityname, MIN(users.age) FROM cities JOIN users ON cities.id = users.city_id  JOIN Piks on pkid = ukid GROUP BY cities.cityname
 
 select address from Guest Group by address;
+
+SELECT city, avg(address), sum(email) from Room JOIN Guest on Room.reserveId = Guest.reserveId Group by city;

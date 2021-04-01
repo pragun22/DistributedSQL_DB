@@ -271,10 +271,7 @@ print('AttribIdToAttrib =>',AttribIdToAttrib,end='\n\n\n')
 QueryForSite = {}
 
 
-# need to include and & or as well
-if 'Hor' in FragmentTypeToId and 'Ver' in FragmentTypeToId:
-	
-	## finding sites for 'Hor'
+if 'Hor' in FragmentTypeToRelation:
 	try:
 		sitesHor=[]
 		if HOR_CONDITION in having:
@@ -292,41 +289,11 @@ if 'Hor' in FragmentTypeToId and 'Ver' in FragmentTypeToId:
 		else:
 			for fragId in FragmentTypeToId['Hor']:
 				sitesHor.append(FragmentIdToSite[fragId])
-		## finding sites for 'Ver'
-		
-		siteIdToAttribVer = {}
-		sitesVer = []
-		mapSiteIdToFragIdVer = {}
-
-		for fragId in FragmentTypeToId['Ver']:
-			for attribId in AttribIdToAttrib:
-				query = "SELECT * FROM VerFragment WHERE FragmentId = " + str(fragId) + " and AttributeId = " + str(attribId)
-				cursor.execute(query)
-				res = cursor.fetchall()
-				if len(res)!=0:
-					siteId = FragmentIdToSite[fragId]
-					mapSiteIdToFragIdVer[siteId] = fragId
-					if siteId not in siteIdToAttribVer:
-						siteIdToAttribVer[siteId] = []
-					siteIdToAttribVer[siteId].append(attribId)
-
-		TotalAtt = len(RelationToAttribsId[FragmentTypeToRelation['Ver']])
-
-		for siteId in siteIdToAttribVer:
-			if len(siteIdToAttribVer[siteId]) == 1 and 'id' in siteIdToAttribVer[siteId]:
-				continue
-			sitesVer.append(siteId)
-			if len(siteIdToAttribVer) == TotalAtt:
-				sitesVer = []
-				sitesVer.append(siteId)
-				break
-		if len(sitesVer) == 0:
-			sitesVer.append(1)
 	except Exception as e:
-		print("Error while optimisng relations for semi join:")
+		print("Error while finding sites for Horizontal Fragment")
 		print(e)
+
 	try:
-		## Bringinn Hor to one place
 		attribsHor = RelationToAttribs[FragmentTypeToRelation['Hor']]
 		attribTypeHor = {}
 		query = "DESCRIBE " + FragmentTypeToRelation['Hor']
@@ -362,6 +329,48 @@ if 'Hor' in FragmentTypeToId and 'Ver' in FragmentTypeToId:
 			query += ");"
 			cursor.execute(query)
 
+	except Exception as e:
+		print("Error while moving data to one site for semi-join for Horizontal Fragment")
+		print(e)
+
+	input_query = input_query.replace(FragmentTypeToRelation['Hor'],'TempHor')
+
+if 'DHor' in FragmentTypeToRelation:
+	input_query = input_query.replace(FragmentTypeToRelation['DHor'],'TempDHor')
+if 'Ver' in FragmentTypeToRelation:
+	try:
+		siteIdToAttribVer = {}
+		sitesVer = []
+		mapSiteIdToFragIdVer = {}
+
+		for fragId in FragmentTypeToId['Ver']:
+			for attribId in AttribIdToAttrib:
+				query = "SELECT * FROM VerFragment WHERE FragmentId = " + str(fragId) + " and AttributeId = " + str(attribId)
+				cursor.execute(query)
+				res = cursor.fetchall()
+				if len(res)!=0:
+					siteId = FragmentIdToSite[fragId]
+					mapSiteIdToFragIdVer[siteId] = fragId
+					if siteId not in siteIdToAttribVer:
+						siteIdToAttribVer[siteId] = []
+					siteIdToAttribVer[siteId].append(attribId)
+
+		TotalAtt = len(RelationToAttribsId[FragmentTypeToRelation['Ver']])
+
+		for siteId in siteIdToAttribVer:
+			if len(siteIdToAttribVer[siteId]) == 1 and 'id' in siteIdToAttribVer[siteId]:
+				continue
+			sitesVer.append(siteId)
+			if len(siteIdToAttribVer) == TotalAtt:
+				sitesVer = []
+				sitesVer.append(siteId)
+				break
+		if len(sitesVer) == 0:
+			sitesVer.append(1)
+	except Exception as e:
+		print("Error while finding sites for Vertical Fragment")
+
+	try:
 		VerMap = {}
 		Veratts = []
 		attribTypeVer = {}
@@ -427,223 +436,19 @@ if 'Hor' in FragmentTypeToId and 'Ver' in FragmentTypeToId:
 			query = query[:-2]
 			query += ");"
 			cursor.execute(query)
-	
-	except Exception as e:
-		print("Error while transferring data for semi join")
-		print(e)
-	
-	tempQ = input_query.replace(FragmentTypeToRelation['Hor'], 'TempHor')
-	tempQ = tempQ.replace(FragmentTypeToRelation['Ver'], 'TempVer')
-	print("Printing Q", tempQ)
-	try:
-		cursor.execute(tempQ)
-		res = cursor.fetchall()
-		for i in res:
-			print(res)
 
-		cursor.execute("DROP Table TempHor")
-		cursor.execute("DROP Table TempVer")
-		cursor.close()
-		conn.close()
 	except Exception as e:
-		print("Error while executing final Query")
+		print("Error while moving data for semi join in Ver Fragment")
 		print(e)
 
-elif 'Hor' in FragmentTypeToId and 'DHor' in FragmentTypeToId:
-	pass
 
-elif 'Ver' in FragmentTypeToId and 'DHor' in FragmentTypeToId:
-	pass
+	input_query = input_query.replace(FragmentTypeToRelation['Ver'],'TempVer')
 
- 
-elif 'Hor' in FragmentTypeToId:
-	print("For Horizontal Fragments")
-	queryH = "SELECT "
-	Hq = ""
-	gb = " GROUP BY "
-	for att in RelationToAttribs[FragmentTypeToRelation['Hor']]:
-		
-		if att in selects:
-			queryH += (att+", ")
-		elif att in attribToAggs:
-			queryH += (attribToAggs[att] +"(" + att + "), ")
-		if att in groupby:
-			gb += (att+", ")
-		if att in having:
-			Hq += FormWhereQueries(havingop[att], att, havingcond[att])
-			Hq += " and "
-
-	queryH = queryH[:-2]
-	queryH += " FROM " + FragmentTypeToRelation['Hor'];
-	queryH += gb[:-2] ;
-
-
-	if Hq != "":
-		queryH += " Having "
-		queryH += Hq[:-4]
-		queryH += ";"
-
-	if HOR_CONDITION in having:
-		condition = havingcond[HOR_CONDITION]
-		query = "select FragmentId from HorFragment where `condition` = '"+str(condition)+"';"
-		cursor.execute(query)
-		result = cursor.fetchall()
-		try:
-			fragId = result[0][0]
-		except:
-			print("Fragment doesn't exist \nexiting")
-			EXIT()
-		siteId = FragmentIdToSite[fragId]		
-		print("Only need to perform Horizontal Fragment query on site with ID ", siteId)
-		QueryForSite[siteId].append(queryH)
-
-	else:
-		print("Need to perform queries on all the Sites")
-
-		for fragId in FragmentTypeToId['Hor']:
-			siteId = FragmentIdToSite[fragId]
-			if siteId not in QueryForSite:
-				QueryForSite[siteId] = []
-			QueryForSite[siteId].append(queryH)
-
-	print(queryH)
-
-elif 'DHor' in FragmentTypeToId:
-
-	print("For Derived Horizontal Fragments")
-	queryH = "SELECT "
-	Hq = ""
-	gb = " GROUP BY "
-	for att in RelationToAttribs[FragmentTypeToRelation['DHor']]:
-		
-		if att in selects:
-			queryH += (att+", ")
-		elif att in attribToAggs:
-			queryH += (attribToAggs[att] +"(" + att + "), ")
-		if att in groupby:
-			gb += (att+", ")
-		if att in having:
-			Hq += FormWhereQueries(havingop[att], att, havingcond[att])
-			Hq += " and "
-
-	queryH = queryH[:-2]
-	queryH += " FROM " + FragmentTypeToRelation['DHor'];
-	queryH += gb[:-2]
-
-
-	if Hq != "":
-		queryH += " Having "
-		queryH += Hq[:-4]
-		queryH += ";"
-
-	print(queryH)
-	if DHOR_CONDITION in having:
-		condition = havingcond[DHOR_CONDITION]
-		query = "select FragmentId from DHorFragment where `condition` = '"+str(condition)+"';"
-		cursor.execute(query)
-		result = cursor.fetchall()
-		try:
-			fragId = result[0][0]
-		except:
-			print("Fragment doesn't exist \nexiting")
-			EXIT()
-		siteId = FragmentIdToSite[fragId]		
-		print("Only need to perform Derived Horizontal Fragment query on site with ID ", siteId)
-		QueryForSite[siteId].append(queryH)
-	else:
-		print("Need to perform queries on all the Sites")
-
-		for fragId in FragmentTypeToId['DHor']:
-			siteId = FragmentIdToSite[fragId]
-			if siteId not in QueryForSite:
-				QueryForSite[siteId] = []
-			QueryForSite[siteId].append(queryH)
-
-
-# create siteIdtoattrib
-# check if a single site suffices or need to take from multiple sites
-
-elif 'Ver' in FragmentTypeToId:
-	siteIdToAttrib = {}
-
-	for fragId in FragmentTypeToId['Ver']:
-		for attribId in AttribIdToAttrib:
-			query = "SELECT * FROM VerFragment WHERE FragmentId = " + str(fragId) + " and AttributeId = " + str(attribId)
-			cursor.execute(query)
-			res = cursor.fetchall()
-			if len(res)!=0:
-				siteId = FragmentIdToSite[fragId]
-				if siteId not in siteIdToAttrib:
-					siteIdToAttrib[siteId] = []
-				siteIdToAttrib[siteId].append(attribId)
-
-	TotalAtt = len(RelationToAttribsId[FragmentTypeToRelation['Ver']])
-
-	flagId = -1
-
-	for siteId in siteIdToAttrib:
-		if len(siteIdToAttrib) == TotalAtt:
-			flagId = siteId
-			break
-	if flagId == -1:
-		print("need to perform query on all sites")
-		query = "SELECT id from Attributes WHERE RelationName="+str(FragmentTypeToRelation['Ver'])+" AttributeName='id'"
-		cursor.execute(query)
-		masterId = cursor.fetchall()[0][0]
-		masterAtt = AttribIdToAttrib[masterId] 
-		for siteId in siteIdToAttrib:
-			print('FOR SITE with ID', siteId)
-			if masterAtt not in siteIdToAttrib[siteId]:
-				siteIdToAttrib[siteId].append(masterAtt)
-			queryV = "SELECT "
-			Hq = ""
-			
-			for attId in siteIdtoattrib[flagId]:
-				att = AttribIdToAttrib[attId]
-				
-				queryV += (att+", ")
-				if att in having:
-					Hq += FormWhereQueries(havingop[att], att, havingcond[att])
-					Hq += " and "
-
-			queryV = queryV[:-2]
-			queryV += " FROM " + FragmentTypeToRelation['Ver'];
-			if Hq != "":
-				queryV += " Having " + Hq[:-4] + ";"
-
-
-			print("query ===>", queryV)
-		
-
-
-
-	else:
-		print("Perform query on a single site with id ", flagId)
-		queryV = "SELECT "
-		Hq = ""
-		gb = " GROUP BY "
-		for attId in siteIdToAttrib[flagId]:
-			att = AttribIdToAttrib[attId]
-			if att in selects:
-				queryV += (att+", ")
-			elif att in attribToAggs:
-				queryV += (attribToAggs[att] +"(" + att + "), ")
-			if att in groupby:
-				gb += (att+", ")
-			if att in having:
-				Hq += FormWhereQueries(havingop[att], att, havingcond[att])
-				Hq += " and "
-		queryV = queryV[:-2]
-
-		queryV += " FROM " + FragmentTypeToRelation['Ver'];
-		queryV += gb[:-2]
-
-		if Hq != "":
-			queryV += " Having " + Hq[:-4] + ";"
-
-		print("query ===>", queryV)
-
-		if flagId not in QueryForSite:
-			QueryForSite[flagId] = []
-		QueryForSite[flagId].append(queryV)
-
+try:
+	cursor.execute(input_query)
+	res  = cursor.fetchall()
+	print(res)
+except Exception as e:
+	print("Error while executing the final query\n\n")
+	print(e)
+	print("\nExiting")

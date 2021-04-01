@@ -57,7 +57,7 @@ attribs = [
 "address",
 "email", 
 "phone", 
-"cit",
+"city",
 "payment", #Product
 ]
 relat = [
@@ -174,9 +174,9 @@ print("CREATE TABLE `Room` (id int not null, city varchar(10) not null, reserveI
 print("CREATE TABLE `Reserve` ( reserveId int not null, checkIn varchar(10) not null, checkOut varchar(10) not null);")
 
 #site 1
-print("CREATE TABLE `Guest` ( id int not null, reserveId int not null, name varchar(10) not null);")
-print("CREATE TABLE `Guest` ( id int not null, address varchar(50) not null, email varchar(20) not null, phone varchar(10) not null, city varchar(10) not null);")
-print("CREATE TABLE `Guest` ( id int not null, payment varchar(10) not null);")
+print("CREATE TABLE `Guest` ( guestId int not null, reserveId int not null, name varchar(10) not null);")
+print("CREATE TABLE `Guest` ( guestId int not null, address varchar(50) not null, email varchar(20) not null, phone varchar(10) not null, city varchar(10) not null);")
+print("CREATE TABLE `Guest` ( guestId int not null, payment varchar(10) not null);")
 
 print("INSERT INTO `Room` VALUES(1, 'Delhi', 1, 401);")
 print("INSERT INTO `Room` VALUES(2, 'Delhi', 2, 402);")
