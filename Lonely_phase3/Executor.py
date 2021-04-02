@@ -2,6 +2,7 @@ from moz_sql_parser import parse
 import mysql.connector
 import os
 import json
+import csv
 import time
 
 def EXIT():
@@ -16,7 +17,38 @@ URL = {}
 URL['1'] = '10.3.5.212'
 URL['2'] = '10.3.5.211'
 URL['3'] = '10.3.5.208'
+URL['localhost'] = 'localhost'
+index = {}
+SelectivityFactors = [[0]*3]*3
+with open('SelectivityFactors.csv', 'r') as file:
+    reader = csv.reader(file)
+    i = 1
+    for row in reader:
+        ind =0
+        print(row)
+        if i == 1:
+        	for col in row:
+        		if col == '':
+        			continue
+        		index[col] = ind
+        		ind += 1
+        else:
+        	for col in row:
+        		if ind !=0:
+        			SelectivityFactors[i-2][ind-1] = col
+        		ind += 1
+        i+=1
 
+print("index ==> ", index)
+print("SelectivityFactors ==> ", SelectivityFactors)
+
+if SelectivityFactors[0][1] > SelectivityFactors[1][0]:
+	URL['localhost'] = URL['1']
+else:
+	URL['localhost'] = URL['2']
+
+if SelectivityFactors[0][2] > SelectivityFactors[0][0]:
+	URL['localhost'] = URL['3']
 
 def FormWhereQueries(op, operand1, operand2):
 	if op == 'eq':
@@ -35,7 +67,7 @@ def FormWhereQueries(op, operand1, operand2):
 ## Connecting to Server
 
 conn = mysql.connector.connect(
-	user='pragun', password='letscode', host='localhost', database='Lonely')
+	user='pragun', password='letscode', host=URL['localhost'], database='Lonely')
 
 cursor = conn.cursor()
 
@@ -385,7 +417,7 @@ while True:
 		print('AttribsToRelation =>',AttribsToRelation)
 		print('AttribIdToAttrib =>',AttribIdToAttrib,end='\n\n\n')
 
-		QueryForSite = {}
+
 
 
 		if 'Hor' in FragmentTypeToRelation:
