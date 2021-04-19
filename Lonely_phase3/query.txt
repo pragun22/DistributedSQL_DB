@@ -63,3 +63,4 @@ SELECT Room.city, max(Guest.reserveId), sum(roomNo), sum(phone), max(payment) fr
 SELECT Room.city, sum(Room.reserveId), sum(Reserve.reserveId), max(checkIn) from Room JOIN Reserve on Room.reserveId = Reserve.reserveId Group by Room.city 
 
 
+UPDATE Supplier SET CompanyName="New Name 1" WHERE id = 2

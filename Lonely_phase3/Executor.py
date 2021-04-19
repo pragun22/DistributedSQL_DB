@@ -84,6 +84,7 @@ while True:
 
 	input_query = input()
 
+	startTime = time.time()
 	### Parsing and generatign jasonizable tree
 
 	try:
@@ -99,83 +100,83 @@ while True:
 		# print("Initial Parse Tree")
 		print(parse_tree)
 
-		selects = []
-		aggs = {}
-		attribToAggs = {}
-		groupby = []
-		havingcond = {}
-		havingop = {}
-		having = []
-		wherecond = {}
-		whereop = {}
-		where = []
-		
-		relations = []
-
-		joinFlag = False
-		semiJoinCond = None 
-		joinAtts = []
-		if isinstance(parse_tree['from'], str):
-			relations.append(parse_tree['from'])
-		else :
-			for rel in parse_tree['from']:
-				if isinstance(rel, str):
-					relations.append(rel)
-				else:
-					try:
-						relations.append(rel['join'])
-						semiJoinCond = rel['on']
-						for temp in rel['on']:
-							joinAtts.append(rel['on'][temp][0].split('.')[1])
-							joinAtts.append(rel['on'][temp][1].split('.')[1])
-						joinFlag = True
-					except Exception as e:
-						print("Error in join syntax")
-						print(e)
-						raise EXIT
-
-
-		if isinstance(parse_tree['select'], list):
-				for i in parse_tree['select']:
-					if isinstance(i['value'], str):
-						if '.' in i['value']:
-							selects.append(i['value'].split('.')[1])
-						else:
-							selects.append(i['value'])
-					else:
-						for temp in i['value']:
-							if '.' in i['value'][temp]:
-								aggs[temp] = i['value'][temp].split('.')[1]
-								attribToAggs[i['value'][temp].split('.')[1]] = temp
-							else:
-								aggs[temp] = i['value'][temp]
-								attribToAggs[i['value'][temp]] = temp
-							# selects.append(i['value'][temp])
-		else:
-			if isinstance(parse_tree['select']['value'], str): 
-				if '.' in parse_tree['select']['value']:
-					selects.append(parse_tree['select']['value'].split('.')[1])
-				else:
-					selects.append(parse_tree['select']['value'])
-			else:
-				for temp in parse_tree['select']['value']:
-					if temp not in aggs:
-						aggs[temp] = []
-
-					tp = parse_tree['select']['value'][temp]
-					if '.' in tp:
-						tp = tp.split('.')[1]
-					aggs[temp].append(tp)
-					attribToAggs[tp] = temp
-
-
-
-		if 'groupby' not in parse_tree and len(aggs)!=0:
-			print("Error with query\nLooking for groupby but couldn't find it")
-			# exit(0)
-			raise EXIT
-
 		try:
+			selects = []
+			aggs = {}
+			attribToAggs = {}
+			groupby = []
+			havingcond = {}
+			havingop = {}
+			having = []
+			wherecond = {}
+			whereop = {}
+			where = []
+			
+			relations = []
+
+			joinFlag = False
+			semiJoinCond = None 
+			joinAtts = []
+			if isinstance(parse_tree['from'], str):
+				relations.append(parse_tree['from'])
+			else :
+				for rel in parse_tree['from']:
+					if isinstance(rel, str):
+						relations.append(rel)
+					else:
+						try:
+							relations.append(rel['join'])
+							semiJoinCond = rel['on']
+							for temp in rel['on']:
+								joinAtts.append(rel['on'][temp][0].split('.')[1])
+								joinAtts.append(rel['on'][temp][1].split('.')[1])
+							joinFlag = True
+						except Exception as e:
+							print("Error in join syntax")
+							print(e)
+							raise EXIT
+
+
+			if isinstance(parse_tree['select'], list):
+					for i in parse_tree['select']:
+						if isinstance(i['value'], str):
+							if '.' in i['value']:
+								selects.append(i['value'].split('.')[1])
+							else:
+								selects.append(i['value'])
+						else:
+							for temp in i['value']:
+								if '.' in i['value'][temp]:
+									aggs[temp] = i['value'][temp].split('.')[1]
+									attribToAggs[i['value'][temp].split('.')[1]] = temp
+								else:
+									aggs[temp] = i['value'][temp]
+									attribToAggs[i['value'][temp]] = temp
+								# selects.append(i['value'][temp])
+			else:
+				if isinstance(parse_tree['select']['value'], str): 
+					if '.' in parse_tree['select']['value']:
+						selects.append(parse_tree['select']['value'].split('.')[1])
+					else:
+						selects.append(parse_tree['select']['value'])
+				else:
+					for temp in parse_tree['select']['value']:
+						if temp not in aggs:
+							aggs[temp] = []
+
+						tp = parse_tree['select']['value'][temp]
+						if '.' in tp:
+							tp = tp.split('.')[1]
+						aggs[temp].append(tp)
+						attribToAggs[tp] = temp
+
+
+
+			if 'groupby' not in parse_tree and len(aggs)!=0:
+				print("Error with query\nLooking for groupby but couldn't find it")
+				# exit(0)
+				raise EXIT
+
 			if 'groupby' in parse_tree:
 				if isinstance(parse_tree['groupby'], list):
 					for val in parse_tree['groupby']:
@@ -678,6 +679,8 @@ while True:
 			print("Error while executing the final query\n\n")
 			print(e)
 			print("\nExiting")
+
+		print("Query Time:\n--- %s seconds ---" % (time.time() - startTime))
 	
 
 	except Exiting:

@@ -1,0 +1,167 @@
+Commit Txn1
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Timeout http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+Timeout http://10.3.5.208:7000/
+Global Abort
+Commit Txn2
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Timeout http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+Global Abort
+Commit Txn3
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+Abort http://10.3.5.208:7000/
+Global Abort
+Commit Txn4
+Prepare http://10.3.5.212:7000/
+Timeout http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+Abort http://10.3.5.208:7000/
+Global Abort
+Commit Txn5
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn5
+Commit Txn6
+Prepare http://10.3.5.212:7000/
+Abort http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+Global Abort
+Commit Txn7
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn7
+Commit Txn8
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn8
+Commit Txn9
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn9
+Commit Txn10
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn10
+Commit Txn11
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn11
+Commit Txn12
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn12
+Commit Txn13
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn13
+Commit Txn14
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn14
+Commit Txn15
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn15
+Commit Txn16
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn16
+Commit Txn17
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn17
+Commit Txn18
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn18
+Commit Txn1
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn1
+Commit Txn2
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn2
+Commit Txn3
+Prepare http://10.3.5.212:7000/
+Abort http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+Abort http://10.3.5.208:7000/
+Global Abort
+Commit Txn4
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn4
+Commit Txn5
+Prepare http://10.3.5.212:7000/
+Abort http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Abort http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+Global Abort
+Commit Txn6
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Abort http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+Global Abort
+Commit Txn7
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn7
+Commit Txn8
+Prepare http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+GlobalCommit
+End Of Txn8
+Commit Txn9
+Prepare http://10.3.5.212:7000/
+Timeout http://10.3.5.212:7000/
+Prepare http://10.3.5.211:7000/
+Prepare http://10.3.5.208:7000/
+Timeout http://10.3.5.208:7000/
+Global Abort
